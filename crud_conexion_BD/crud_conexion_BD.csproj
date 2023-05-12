@@ -54,19 +54,23 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -75,6 +79,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\actualizar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\1486485588-add-create-new-math-sign-cross-plus_81186.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\UserEdit_40958.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\3592869-compose-create-edit-edit-file-office-pencil-writing-creative_107746.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\3592821-garbage-can-general-office-recycle-bin-rubbish-bin-trash-bin-trash-can_107760.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\crear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\editar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imagenes\eliminar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
