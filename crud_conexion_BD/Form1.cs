@@ -24,6 +24,18 @@ namespace crud_conexion_BD
         // Variables globales
         public int posicionActual = 0;
 
+        private void btn_minimizar_form_Click(object sender, EventArgs e)
+        {
+            // Minimizar formulario
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btn_cerrar_formulario_Click(object sender, EventArgs e)
+        {
+            // Cerrar formulario
+            Application.Exit();
+        }
+
         private void btn_primer_registro_Click(object sender, EventArgs e)
         {
             // Boton para navegar al primer registro
@@ -39,7 +51,7 @@ namespace crud_conexion_BD
                 SqlDataReader lector = cmd.ExecuteReader();
 
                 // Verificar si hay filas en el resultado
-                if(lector.HasRows)
+                if (lector.HasRows)
                 {
                     // Leer la primera fila del resultado 
                     lector.Read();
@@ -50,17 +62,17 @@ namespace crud_conexion_BD
                     //Agregar los datos al datagrid
                     dgv_mostrar_registros.Rows.Add(lector["ID"], lector["Nombre"], lector["Apellido"], lector["Edad"]);
 
-                    
+
                 }
                 lector.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(" Error en la lectura del registro: " + ex.Message);
             }
             finally
             {
-                if(conexion.State == ConnectionState.Open)
+                if (conexion.State == ConnectionState.Open)
                 {
                     conexion.Close();
                 }
@@ -113,10 +125,11 @@ namespace crud_conexion_BD
 
         private void btn_registro_anterior_Click(object sender, EventArgs e)
         {
+            bool validar_ultimo_registro = false;
             // Boton para navegar al registro anterior
             try
             {
-                if(posicionActual > 0)
+                if (posicionActual > 0)
                 {
                     posicionActual--;
 
@@ -131,6 +144,8 @@ namespace crud_conexion_BD
 
                     if (lector.HasRows)
                     {
+                        validar_ultimo_registro = true;
+                        btn_registro_anterior.Enabled = true;
                         // Mover el lector al registro anterior 
                         for (int i = 0; i <= posicionActual; i++)
                         {
@@ -150,17 +165,18 @@ namespace crud_conexion_BD
 
                     lector.Close();
                 }
-                
-
             }
-            catch(Exception ex)
+            catch
             {
-                MessageBox.Show(" Error al leer el registro: " + ex.Message);
+                if (validar_ultimo_registro == false)
+                {
+                    btn_registro_anterior.Enabled = false;
+                }
             }
             finally
             {
                 // Verificar si la conexion esta abierta, de ser asi cerrarla
-                if(conexion.State == ConnectionState.Open)
+                if (conexion.State == ConnectionState.Open)
                 {
                     conexion.Close();
                 }
@@ -170,9 +186,9 @@ namespace crud_conexion_BD
 
         private void btn_registro_siguiente_Click(object sender, EventArgs e)
         {
+            bool validar_ultimo_registro = false;
             try
             {
-                btn_registro_siguiente.Enabled = true;
                 if (posicionActual >= 0)
                 {
                     posicionActual++;
@@ -185,9 +201,10 @@ namespace crud_conexion_BD
                     // Objeto para leer los reultados de la consulta
                     SqlDataReader lector = cmd.ExecuteReader();
 
-
                     if (lector.HasRows)
                     {
+                        validar_ultimo_registro = true;
+                        btn_registro_siguiente.Enabled = true;
                         // Mover el lector al registro siguiente
                         for (int i = 0; i <= posicionActual; i++)
                         {
@@ -201,27 +218,27 @@ namespace crud_conexion_BD
                         dgv_mostrar_registros.Rows.Add(lector["ID"], lector["Nombre"], lector["Apellido"], lector["Edad"]);
 
                     }
-                    else
-                    {
-                        btn_registro_siguiente.Enabled = false;
-                    }
 
                     lector.Close();
                 }
 
             }
-            catch(Exception ex)
+            catch
             {
-                MessageBox.Show(" Error al leer el registro: " + ex.Message);
+                if (validar_ultimo_registro == false)
+                {
+                    btn_registro_siguiente.Enabled = false;
+                }
             }
             finally
             {
                 // Verificar si conexion esta abierta, de ser asi cerrarla
-                if(conexion.State == ConnectionState.Open)
+                if (conexion.State == ConnectionState.Open)
                 {
                     conexion.Close();
                 }
             }
+
         }
 
         private void dgv_mostrar_registros_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -229,7 +246,7 @@ namespace crud_conexion_BD
 
         }
 
-       
+
 
 
 
@@ -239,6 +256,99 @@ namespace crud_conexion_BD
             dgv_mostrar_registros.Rows.Clear();
         }
 
-       
+        private void img_crear_Click(object sender, EventArgs e)
+        {
+            grp_datos_usuario.Visible = true;
+            int desplazamientoVertical = 120; // Ajusta el valor del desplazamiento según tus necesidades
+            grp_mostrar_datos.Location = new Point(grp_mostrar_datos.Location.X, grp_mostrar_datos.Location.Y + desplazamientoVertical);
+
+
+        }
+
+        private void btn_guardar_datos_Click(object sender, EventArgs e)
+        {
+            grp_datos_usuario.Visible = false;
+            int desplazamientoVertical = 120; // Ajusta el valor del desplazamiento según tus necesidades
+            grp_mostrar_datos.Location = new Point(grp_mostrar_datos.Location.X, grp_mostrar_datos.Location.Y - desplazamientoVertical);
+
+            // Asigar el valor de los textbox a una nueva variable
+            string nombre = txt_nombre_usuario.Text;
+            string apellido = txt_apellido_usuario.Text;
+            string edad = txt_edad_usuario.Text;
+
+            // Validar campos no esten vacios
+            if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(apellido) || string.IsNullOrEmpty(edad))
+            {
+                MessageBox.Show(" TODOS LOS CAMPOS DEBEN ESTAR COMPLETOS");
+                return;
+            }
+
+            // Validar que el campo edad sea un numero entero
+            int edadInt;
+            if (!int.TryParse(edad, out edadInt))
+            {
+                MessageBox.Show(" LA EDAD DEBE SER UN VALOR ENTERO");
+                return;
+            }
+
+            // crear consulta sql
+            string consulta = "INSERT INTO tbl_usuarios ( Nombre, Apellido, Edad) VALUES (@nombre, @apellido, @edad)";
+
+            try
+            {
+                using (SqlCommand comando = new SqlCommand(consulta, conexion))
+                {
+                    // Abrir conexion con bd
+                    conexion.Open();
+
+                    // Asignar los valores a los parametros del comando SQL
+                    comando.Parameters.AddWithValue("@nombre", nombre);
+                    comando.Parameters.AddWithValue("@apellido", apellido);
+                    comando.Parameters.AddWithValue("@edad", edad);
+
+                    // Ejecutar el comando SQL
+                    int filasAfectadas = comando.ExecuteNonQuery();
+
+                    // Verificar si se inserto correctamente el registro
+                    if (filasAfectadas > 0)
+                    {
+                        MessageBox.Show(" Registro creado exitosamente");
+                        limpiar_textbox();
+                    }
+                    else
+                    {
+                        MessageBox.Show(" Error al crear el registro");
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(" Error al crear el registro: " + ex.Message);
+            }
+            finally
+            {
+                if(conexion.State == ConnectionState.Open)
+                {
+                    conexion.Close();
+                }
+            }
+
+
+
+
+        }
+
+        // METODOS: 
+        public void limpiar_textbox()
+        {
+            txt_nombre_usuario.Text = "";
+            txt_apellido_usuario.Text = "";
+            txt_edad_usuario.Text = "";
+            txt_nombre_usuario.Focus();
+        }
+
+        
     }
 }
