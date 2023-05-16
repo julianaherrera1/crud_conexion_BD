@@ -349,6 +349,67 @@ namespace crud_conexion_BD
             txt_nombre_usuario.Focus();
         }
 
-        
+        private void img_editar_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(" RECUERDE DARLE ENTER PARA PODER HACER LA CORRECTA ACTUALIZACION");
+            dgv_mostrar_registros.ReadOnly = false;
+            dgv_mostrar_registros.EditMode = DataGridViewEditMode.EditOnEnter;
+
+            int  id = Convert.ToInt32(dgv_mostrar_registros.CurrentRow.Cells["id_usuario"].Value);
+            string nombre = dgv_mostrar_registros.CurrentRow.Cells["nombre_usuario"].Value.ToString();
+            string apellido = dgv_mostrar_registros.CurrentRow.Cells["apellido_usuario"].Value.ToString();
+            string edad = dgv_mostrar_registros.CurrentRow.Cells["edad_usuario"].Value.ToString();
+
+            
+            // Consulta SQL
+            string consulta = "UPDATE tbl_usuarios SET  Nombre=@nombre, Apellido=@apellido, Edad=@edad WHERE ID = @id";
+
+            using(SqlCommand comando = new SqlCommand(consulta, conexion))
+            {
+                try
+                {
+                    // Abrir conexion bd
+                    conexion.Open();
+
+                    //Asignar valores a los parametros del comando sql
+                    comando.Parameters.AddWithValue("@nombre", nombre);
+                    comando.Parameters.AddWithValue("@apellido", apellido);
+                    comando.Parameters.AddWithValue("@edad", edad);
+                    comando.Parameters.AddWithValue("@id", id);
+
+
+                    // Ejecutar comando 
+                    int filasAfectadas = comando.ExecuteNonQuery();
+
+                    // Verificar si se actualizo correctamente el registro
+                    if(filasAfectadas > 0)
+                    {
+
+                        MessageBox.Show(" Registro actualizado correctamente");
+                    }
+                    else
+                    {
+                        MessageBox.Show(" Error al actualizar el registro");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(" Error al editar el archivo: " + ex.Message);
+                }
+                finally
+                {
+                    if(conexion.State == ConnectionState.Open)
+                    {
+                        conexion.Close();
+                    }
+                }
+            }
+        }
+
+        private void dgv_mostrar_registros_KeyDown(object sender, KeyEventArgs e)
+        {
+            
+               
+        }
     }
 }

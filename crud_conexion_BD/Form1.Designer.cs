@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn_minimizar_form = new System.Windows.Forms.Button();
             this.btn_cerrar_formulario = new System.Windows.Forms.Button();
@@ -57,6 +58,7 @@
             this.lbl_apellido_usuario = new System.Windows.Forms.Label();
             this.lbl_nombre_usuario = new System.Windows.Forms.Label();
             this.grp_mostrar_datos = new System.Windows.Forms.GroupBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_mostrar_registros)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.img_crear)).BeginInit();
@@ -65,6 +67,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.img_editar)).BeginInit();
             this.grp_datos_usuario.SuspendLayout();
             this.grp_mostrar_datos.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -111,14 +114,14 @@
             this.dgv_mostrar_registros.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgv_mostrar_registros.BackgroundColor = System.Drawing.Color.Black;
             this.dgv_mostrar_registros.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_mostrar_registros.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_mostrar_registros.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgv_mostrar_registros.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_mostrar_registros.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id_usuario,
@@ -130,6 +133,7 @@
             this.dgv_mostrar_registros.Size = new System.Drawing.Size(491, 61);
             this.dgv_mostrar_registros.TabIndex = 5;
             this.dgv_mostrar_registros.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_mostrar_registros_CellContentClick);
+            this.dgv_mostrar_registros.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgv_mostrar_registros_KeyDown);
             // 
             // id_usuario
             // 
@@ -192,6 +196,7 @@
             this.img_editar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.img_editar.TabIndex = 1;
             this.img_editar.TabStop = false;
+            this.img_editar.Click += new System.EventHandler(this.img_editar_Click);
             // 
             // btn_primer_registro
             // 
@@ -395,6 +400,10 @@
             this.grp_mostrar_datos.TabStop = false;
             this.grp_mostrar_datos.Text = "groupBox1";
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // frm1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -411,6 +420,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frm1";
             this.Opacity = 0.95D;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_mostrar_registros)).EndInit();
@@ -421,6 +431,7 @@
             this.grp_datos_usuario.ResumeLayout(false);
             this.grp_datos_usuario.PerformLayout();
             this.grp_mostrar_datos.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -455,6 +466,7 @@
         private System.Windows.Forms.Label lbl_linea_nombre;
         private System.Windows.Forms.Button btn_minimizar_form;
         private System.Windows.Forms.Button btn_cerrar_formulario;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
 
