@@ -353,7 +353,7 @@ namespace crud_conexion_BD
         {
             MessageBox.Show(" RECUERDE DARLE ENTER PARA PODER HACER LA CORRECTA ACTUALIZACION");
             dgv_mostrar_registros.ReadOnly = false;
-            dgv_mostrar_registros.EditMode = DataGridViewEditMode.EditOnEnter;
+            dgv_mostrar_registros.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
 
             int  id = Convert.ToInt32(dgv_mostrar_registros.CurrentRow.Cells["id_usuario"].Value);
             string nombre = dgv_mostrar_registros.CurrentRow.Cells["nombre_usuario"].Value.ToString();
@@ -406,10 +406,47 @@ namespace crud_conexion_BD
             }
         }
 
-        private void dgv_mostrar_registros_KeyDown(object sender, KeyEventArgs e)
+        private void img_eliminar_Click(object sender, EventArgs e)
         {
-            
-               
+            int id = Convert.ToInt32(dgv_mostrar_registros.CurrentRow.Cells["id_usuario"].Value);
+            string consulta = "DELETE FROM tbl_usuarios WHERE ID = @id";
+
+            using (SqlCommand comando = new SqlCommand(consulta, conexion))
+            {
+                // Asigna el valor del ID del registro a eliminar al parámetro del comando
+                comando.Parameters.AddWithValue("@id", id);
+
+                try
+                {
+                    // Abrir la conexión 
+                    conexion.Open();
+
+                    // Ejecuta el comando de eliminación
+                    int filasAfectadas = comando.ExecuteNonQuery();
+
+                    // Verifica si se eliminó correctamente el registro
+                    if (filasAfectadas > 0)
+                    {
+                        MessageBox.Show("Registro eliminado exitosamente");
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se encontró el registro para eliminar");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al eliminar el registro: " + ex.Message);
+                }
+                finally
+                {
+                    // Cierra la conexión a la base de datos
+                    conexion.Close();
+                }
+
+            }
+
         }
     }
 }

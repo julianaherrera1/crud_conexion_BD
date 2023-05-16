@@ -133,7 +133,6 @@
             this.dgv_mostrar_registros.Size = new System.Drawing.Size(491, 61);
             this.dgv_mostrar_registros.TabIndex = 5;
             this.dgv_mostrar_registros.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_mostrar_registros_CellContentClick);
-            this.dgv_mostrar_registros.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgv_mostrar_registros_KeyDown);
             // 
             // id_usuario
             // 
@@ -186,6 +185,7 @@
             this.img_eliminar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.img_eliminar.TabIndex = 2;
             this.img_eliminar.TabStop = false;
+            this.img_eliminar.Click += new System.EventHandler(this.img_eliminar_Click);
             // 
             // img_editar
             // 
