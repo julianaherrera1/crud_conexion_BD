@@ -160,51 +160,11 @@ namespace crud_conexion_BD
 
         private void btn_registro_siguiente_Click(object sender, EventArgs e)
         {
-
-            /*try
-            {
-                conexion.Open();
-                SqlCommand comando = new SqlCommand("SELECT * FROM tbl_usuarios", conexion);
-                using (SqlDataReader lector = comando.ExecuteReader())
-                {
-                    if (lector.HasRows)
-                    {
-                        if (lector.Read())
-                        {
-                            // Mover el lector al siguiente registro
-                            for (int i = 0; i < posicionActual; i++)
-                            {
-                                lector.Read();
-                            }
-
-                            // Limpiar el DataGridView
-                            dgv_mostrar_registros.Rows.Clear();
-
-                            // Agregar los datos al DataGridView
-                            dgv_mostrar_registros.Rows.Add(lector["ID"], lector["Nombre"], lector["Apellido"], lector["Edad"]);
-                        }
-                    }
-                    else
-                    {
-                        dgv_mostrar_registros.Rows.Clear();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }*/
-            
-
             posicionActual++;
             if (posicionActual >= dataTable.Rows.Count)
                 posicionActual = 0;
 
             MostrarRegistroActual();
-
-
-
-
         }
 
         private void dgv_mostrar_registros_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -303,50 +263,52 @@ namespace crud_conexion_BD
         // EDITAR UN REGISTRO
         private void img_editar_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(" RECUERDE DARLE ENTER PARA PODER HACER LA CORRECTA ACTUALIZACION");
-            dgv_mostrar_registros.ReadOnly = false;
-            dgv_mostrar_registros.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            MessageBox.Show("RECUERDE DARLE ENTER PARA PODER HACER LA CORRECTA ACTUALIZACIÓN");
+            dgv_mostrar_registros.EndEdit(); // Finalizar cualquier edición activa en el DataGridView
 
             int id = Convert.ToInt32(dgv_mostrar_registros.CurrentRow.Cells["id_usuario"].Value);
             string nombre = dgv_mostrar_registros.CurrentRow.Cells["nombre_usuario"].Value.ToString();
             string apellido = dgv_mostrar_registros.CurrentRow.Cells["apellido_usuario"].Value.ToString();
             string edad = dgv_mostrar_registros.CurrentRow.Cells["edad_usuario"].Value.ToString();
 
-
             // Consulta SQL
-            string consulta = "UPDATE tbl_usuarios SET  Nombre=@nombre, Apellido=@apellido, Edad=@edad WHERE ID = @id";
+            string consulta = "UPDATE tbl_usuarios SET Nombre=@nombre, Apellido=@apellido, Edad=@edad WHERE ID = @id";
 
             using (SqlCommand comando = new SqlCommand(consulta, conexion))
             {
                 try
                 {
-                    // Abrir conexion bd
+                    // Abrir conexión bd
                     conexion.Open();
 
-                    //Asignar valores a los parametros del comando sql
+                    // Asignar valores a los parámetros del comando SQL
                     comando.Parameters.AddWithValue("@nombre", nombre);
                     comando.Parameters.AddWithValue("@apellido", apellido);
                     comando.Parameters.AddWithValue("@edad", edad);
                     comando.Parameters.AddWithValue("@id", id);
 
-
-                    // Ejecutar comando 
+                    // Ejecutar comando
                     int filasAfectadas = comando.ExecuteNonQuery();
 
-                    // Verificar si se actualizo correctamente el registro
+                    // Verificar si se actualizó correctamente el registro
                     if (filasAfectadas > 0)
                     {
+                        MessageBox.Show("Registro actualizado correctamente");
 
-                        MessageBox.Show(" Registro actualizado correctamente");
+                        // Actualizar el DataTable y refrescar el DataGridView
+                        dataTable.Rows[posicionActual]["Nombre"] = nombre;
+                        dataTable.Rows[posicionActual]["Apellido"] = apellido;
+                        dataTable.Rows[posicionActual]["Edad"] = edad;
+                        dgv_mostrar_registros.Refresh();
                     }
                     else
                     {
-                        MessageBox.Show(" Error al actualizar el registro");
+                        MessageBox.Show("Error al actualizar el registro");
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(" Error al editar el archivo: " + ex.Message);
+                    MessageBox.Show("Error al editar el archivo: " + ex.Message);
                 }
                 finally
                 {
@@ -356,6 +318,8 @@ namespace crud_conexion_BD
                     }
                 }
             }
+
+
         }
 
         // ELIMINAR UN REGISTRO
