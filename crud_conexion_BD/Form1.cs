@@ -24,9 +24,11 @@ namespace crud_conexion_BD
 
 
         // Variables globales
-        public int posicionActual = 0;
+        public DataTable dataTable;
+        public int posicionActual = -1;
 
 
+       
 
         private void btn_minimizar_form_Click(object sender, EventArgs e)
         {
@@ -39,7 +41,25 @@ namespace crud_conexion_BD
             // Cerrar formulario
             Application.Exit();
         }
+        private void frm1_Load(object sender, EventArgs e)
+        {
+            string connectionString = @"Data Source=DESKTOP-KQUVA2I\SQLEXPRESS;Initial Catalog=USUARIOS;Integrated Security=True";
+            string query = "SELECT * FROM tbl_usuarios"; // Reemplaza "tbl_usuarios" con el nombre de tu tabla
 
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+                    }
+                }
+            }
+
+            MostrarRegistroActual();
+        }
 
 
         /// <summary>
@@ -135,13 +155,55 @@ namespace crud_conexion_BD
 
         private void btn_registro_anterior_Click(object sender, EventArgs e)
         {
-            
-
+            MostrarRegistroAnterior();
         }
 
         private void btn_registro_siguiente_Click(object sender, EventArgs e)
         {
+
+            /*try
+            {
+                conexion.Open();
+                SqlCommand comando = new SqlCommand("SELECT * FROM tbl_usuarios", conexion);
+                using (SqlDataReader lector = comando.ExecuteReader())
+                {
+                    if (lector.HasRows)
+                    {
+                        if (lector.Read())
+                        {
+                            // Mover el lector al siguiente registro
+                            for (int i = 0; i < posicionActual; i++)
+                            {
+                                lector.Read();
+                            }
+
+                            // Limpiar el DataGridView
+                            dgv_mostrar_registros.Rows.Clear();
+
+                            // Agregar los datos al DataGridView
+                            dgv_mostrar_registros.Rows.Add(lector["ID"], lector["Nombre"], lector["Apellido"], lector["Edad"]);
+                        }
+                    }
+                    else
+                    {
+                        dgv_mostrar_registros.Rows.Clear();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }*/
             
+
+            posicionActual++;
+            if (posicionActual >= dataTable.Rows.Count)
+                posicionActual = 0;
+
+            MostrarRegistroActual();
+
+
+
 
         }
 
@@ -357,6 +419,7 @@ namespace crud_conexion_BD
                 {
                     lector.Read();
                     limpiar();
+                    limpiar_textbox();
                     dgv_mostrar_registros.Rows.Add(lector["ID"], lector["Nombre"], lector["Apellido"], lector["Edad"]);
                 }
                 else
@@ -393,6 +456,27 @@ namespace crud_conexion_BD
             txt_edad_usuario.Text = "";
             txt_buscar_registro.Text = "";
             txt_nombre_usuario.Focus();
+        }
+        public void MostrarRegistroActual()
+        {
+            if (posicionActual >= 0 && posicionActual < dataTable.Rows.Count)
+            {
+                DataRow row = dataTable.Rows[posicionActual];
+                dgv_mostrar_registros.Rows.Clear();
+                dgv_mostrar_registros.Rows.Add(row["ID"], row["Nombre"], row["Apellido"], row["Edad"]);
+            }
+            else
+            {
+                dgv_mostrar_registros.Rows.Clear();
+            }
+        }
+        private void MostrarRegistroAnterior()
+        {
+            posicionActual--;
+            if (posicionActual < 0)
+                posicionActual = dataTable.Rows.Count - 1;
+
+            MostrarRegistroActual();
         }
 
 
